@@ -23,30 +23,52 @@ export default {
     }
   },
   methods: {
-    handleLogin () {
-      this.$http
-        .post('login', this.formdata)
-        .then(res => {
-          const {
-            data: {
-              data,
-              meta: { msg, status }
-            }
+    // handleLogin () {
+    //   this.$http
+    //     .post('login', this.formdata)
+    //     .then(res => {
+    //       const {
+    //         data: {
+    //           data,
+    //           meta: { msg, status }
+    //         }
 
-          } = res
-          console.log(data)
-          if (status === 200) {
-            this.$router.push({
-              name: 'home'
-            })
-          } else {
-            // 提示框
-            this.$message.error(msg)
-          }
+    //       } = res
+    //       console.log(data)
+    //       if (status === 200) {
+    //         this.$router.push({
+    //           name: 'home '
+    //         })
+    //       } else {
+    //         // 提示框
+    //         this.$message.error(msg)
+    //       }
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
+    // 简化写法
+    async  handleLogin () {
+      const res = await this.$http.post('login', this.formdata)
+      const {
+        data: {
+          data: {token},
+          meta: { msg, status }
+        }
+
+      } = res
+
+      if (status === 200) {
+        localStorage.setItem('token', token)
+
+        this.$router.push({
+          name: 'home'
         })
-        .catch(err => {
-          console.log(err)
-        })
+      } else {
+        // 提示框
+        this.$message.error(msg)
+      }
     }
   }
 }
