@@ -3,7 +3,7 @@
   <el-header><el-row>
   <el-col :span="4"><img src="../assets/logo.png" alt="图片加载失败"></el-col>
   <el-col :span="19" class="maidle"><h2>电商后台管理系统</h2></el-col>
-  <el-col :span="1" ><a href="#" class="logout">退出</a></el-col>
+  <el-col :span="1" ><a href="#" class="logout" @click.prevent="handleLoginout()">退出</a></el-col>
 </el-row>
 </el-header>
   <el-container>
@@ -96,7 +96,18 @@ export default {
       })
       this.$message.warning('请先登录---')
     }
-
+  },
+  methods: {
+    handleLoginout () {
+      // 1.清除token
+      localStorage.clear()
+      // 2.跳转到登录界面
+      this.$router.push({
+        name: 'login'
+      })
+      // 3.提示
+      this.$message.warning('退出成功')
+    }
   }
 }
 </script>
