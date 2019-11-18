@@ -63,9 +63,13 @@
         </template>
       </el-table-column>
        <el-table-column
-        prop="name"
         label="操作"
         width="200">
+        <template slot-scope="scope">
+          <el-button type="primary" icon="el-icon-edit"  circle size="mini" plain="true"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="mini" plain="true"></el-button>
+          <el-button type="success" icon="el-icon-check" circle size="mini" plain="true"></el-button>
+          </template>
       </el-table-column>
 
     </el-table>
