@@ -66,14 +66,24 @@
         label="操作"
         width="200">
         <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit"  circle size="mini" plain="true"></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle size="mini" plain="true"></el-button>
-          <el-button type="success" icon="el-icon-check" circle size="mini" plain="true"></el-button>
+          <el-button type="primary" icon="el-icon-edit"  circle size="mini" plain></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
+          <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           </template>
       </el-table-column>
 
     </el-table>
     <!-- 分页 -->
+     <el-pagination
+     class="page"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pagenum"
+      :page-sizes="[2, 4, 6, 8]"
+      :page-size="2"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
   </el-card>
 </template>
 <script>
@@ -82,8 +92,9 @@ export default {
     return {
       query: '',
       pagenum: 1,
-      pagesize: 10,
-      list: []
+      pagesize: 2,
+      list: [],
+      total:-1,
     }
   },
   created () {
@@ -98,10 +109,20 @@ export default {
       const {data, meta: {msg, status}} = res.data
       if (status === 200) {
         this.list = data.users
-        console.log(this.list)
-        console.log(msg)
+        this.total = data.total
       }
-    }
+    },
+    handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.pagesize = 1;
+        this.pagesize = val;
+        this.getTableData();
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.pagenum = val;
+        this.getTableData();
+      },
 
   }
 }
@@ -115,5 +136,8 @@ export default {
 }
 .searchInput{
   width: 350px;
+}
+.page{
+  margin-top: 20px;
 }
 </style>
