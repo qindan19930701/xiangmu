@@ -112,13 +112,13 @@
     </el-dialog>
     <!-- 角色管理对话框 -->
     <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
-  <el-form :model="newName">
+  <el-form :model="formdata">
     <el-form-item label="用户名" >
-    {{newName}}
+    {{formdata.username}}
     </el-form-item>
     <el-form-item label="角色">
       <el-select v-model="selectVal" placeholder="请选择角色名">
-        <el-option label="请选择" :value="1" disabled></el-option>
+        <el-option label="请选择" :value="-1" disabled></el-option>
         <el-option v-for="(v,i) in roles" :key="i" :label="v.roleName" :value="v.id" ></el-option>
 
       </el-select>
@@ -126,7 +126,7 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisibleRole = false">确 定</el-button>
+    <el-button type="primary" @click="set()">确 定</el-button>
   </div>
 </el-dialog>
   </el-card>
@@ -150,8 +150,8 @@ export default {
         mobile: ''
 
       },
-      selectVal: 1,
-      newName: '',
+      selectVal: -1,
+      currUserId: -1,
       roles: []
     }
   },
@@ -251,11 +251,25 @@ export default {
       console.log(res)
     },
     async showDia (user) {
-      this.newName = user.username
+      this.formdata = user
       this.dialogFormVisibleRole = true
       const res = await this.$http.get(`roles`)
-
+      this.currUserId = user.id
       this.roles = res.data.data
+      const res2 = await this.$http.get(`users/${user.id}`)
+      console.log(res2)
+      this.selectVal = res2.data.data.rid
+    },
+    async set () {
+      const res = await this.$http.put(`users/${this.currUserId}/role`, {
+        rid: this.selectVal
+      })
+      console.log(res)
+      const {meta: {msg, status}} = res.data
+      console.log(msg)
+      if (status === 200) {
+        this.dialogFormVisibleRole = false
+      }
     }
   }
 }
