@@ -54,6 +54,13 @@
         prop="mg_state"
         label="用户状态"
         width="140">
+        <template slot-scope="scope">
+          <el-switch
+  v-model="scope.row.mg_state"
+  active-color="#13ce66"
+  inactive-color="#ff4949">
+</el-switch>
+        </template>
       </el-table-column>
        <el-table-column
         prop="name"
