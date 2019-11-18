@@ -47,7 +47,7 @@
             size="mini"
             plain
           ></el-button>
-          <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
+          <el-button @click.prevent="showDia(scope.row)" type="success" icon="el-icon-check" circle size="mini" plain></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -110,6 +110,25 @@
         >确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 角色管理对话框 -->
+    <el-dialog title="分配角色" :visible.sync="dialogFormVisibleRole">
+  <el-form :model="newName">
+    <el-form-item label="用户名" >
+    {{newName}}
+    </el-form-item>
+    <el-form-item label="角色">
+      <el-select v-model="selectVal" placeholder="请选择角色名">
+        <el-option label="请选择" :value="1" disabled></el-option>
+        <el-option v-for="(v,i) in roles" :key="i" :label="v.roleName" :value="v.id" ></el-option>
+
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisibleRole = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisibleRole = false">确 定</el-button>
+  </div>
+</el-dialog>
   </el-card>
 </template>
 <script>
@@ -123,12 +142,17 @@ export default {
       total: -1,
       dialogFormVisibleAdd: false,
       dialogFormVisibleEdit: false,
+      dialogFormVisibleRole: false,
       formdata: {
         username: '',
         password: '',
         email: '',
         mobile: ''
-      }
+
+      },
+      selectVal: 1,
+      newName: '',
+      roles: []
     }
   },
   created () {
@@ -201,7 +225,7 @@ export default {
           if (status === 200) {
             this.$message.success(msg)
             this.getTableData()
-            this.pagenum=1
+            this.pagenum = 1
           }
         })
         .catch(() => {
@@ -222,9 +246,17 @@ export default {
         this.dialogFormVisibleEdit = false
       }
     },
-   async changeSta(user){
+    async changeSta (user) {
       const res = await this.$http.put(`users/${user.id}/state/${user.mg_state}`)
+      console.log(res)
     },
+    async showDia (user) {
+      this.newName = user.username
+      this.dialogFormVisibleRole = true
+      const res = await this.$http.get(`roles`)
+
+      this.roles = res.data.data
+    }
   }
 }
 </script>
