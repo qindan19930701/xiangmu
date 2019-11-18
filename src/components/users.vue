@@ -10,8 +10,8 @@
     <!-- 搜索 -->
     <el-row class="seartBox">
       <el-col>
-        <el-input placeholder="请输入内容" v-model="query" class="searchInput">
-    <el-button slot="append" icon="el-icon-search"></el-button>
+        <el-input @clear="getAll()" clearable placeholder="请输入内容" v-model="query" class="searchInput">
+    <el-button slot="append" icon="el-icon-search" @click.prevent="searchUser()"></el-button>
   </el-input>
   <!-- 添加按钮 -->
   <el-button type="success">添加用户</el-button>
@@ -123,7 +123,13 @@ export default {
         this.pagenum = val;
         this.getTableData();
       },
-
+    searchUser() {
+      this.pagenum = 1;
+      this.getTableData();
+    },
+    getAll(){
+      this.getTableData();
+    },
   }
 }
 </script>
