@@ -67,7 +67,7 @@
         width="200">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit"  circle size="mini" plain></el-button>
-          <el-button type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
+          <el-button @click="showDele(scope.row)" type="danger" icon="el-icon-delete" circle size="mini" plain></el-button>
           <el-button type="success" icon="el-icon-check" circle size="mini" plain></el-button>
           </template>
       </el-table-column>
@@ -171,6 +171,22 @@ export default {
        this.dialogFormVisibleAdd = false;
        this.getTableData();
      }
+    },
+    showDele(user){
+      this.$confirm('是否删除', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          const res = await this.$http.delete(`users/${user.id}`)
+          const {meta:{msg,status}} = res.data;
+          if (status===200){
+            this.$message.success(msg)
+            this.getTableData();
+          }
+        }).catch(() => {
+          this.$message.info('取消删除')
+        });
     },
   }
 }
