@@ -18,16 +18,81 @@
       </el-col>
     </el-row>
     <!-- 表格 -->
+     <el-table
+      :data="list"
+      style="width: 100%">
+
+      <el-table-column
+        prop="id"
+        label="#"
+        width="80">
+      </el-table-column>
+       <el-table-column
+        prop="username"
+        label="姓名"
+        width="120">
+      </el-table-column>
+       <el-table-column
+        prop="email"
+        label="邮箱"
+        width="140">
+      </el-table-column>
+       <el-table-column
+        prop="mobile"
+        label="电话"
+        width="140">
+      </el-table-column>
+       <el-table-column
+        prop="create_time"
+        label="创建日期"
+        width="140">
+        <template slot-scope="scope">
+          {{scope.row.create_time | time}}
+        </template>
+      </el-table-column>
+       <el-table-column
+        prop="mg_state"
+        label="用户状态"
+        width="140">
+      </el-table-column>
+       <el-table-column
+        prop="name"
+        label="操作"
+        width="200">
+      </el-table-column>
+
+    </el-table>
     <!-- 分页 -->
   </el-card>
 </template>
 <script>
 export default {
-data () {
-  return {
-   query:''
+  data () {
+    return {
+      query: '',
+      pagenum: 1,
+      pagesize: 10,
+      list: []
+    }
+  },
+  created () {
+    this.getTableData()
+  },
+  methods: {
+    // 获取数据
+    async getTableData () {
+      const token = localStorage.getItem('token')
+      this.$http.defaults.headers.common['Authorization'] = token
+      const res = await this.$http.get(`users?query=${this.query}&pagenum=${this.pagenum}&pagesize=${this.pagesize}`)
+      const {data, meta: {msg, status}} = res.data
+      if (status === 200) {
+        this.list = data.users
+        console.log(this.list)
+        console.log(msg)
+      }
+    }
+
   }
-},
 }
 </script>
 <style>

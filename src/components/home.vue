@@ -116,12 +116,7 @@ export default {
 background: #b3c0d1;
 height: 100%;
 }
-.aside{
-background: blue;
-}
-.main{
-background: gold;
-}
+
 .maidle{
   line-height: 60px;
   text-align: center;
