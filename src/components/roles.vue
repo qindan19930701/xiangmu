@@ -4,6 +4,15 @@
     <el-button type="primary" class="btn">添加角色</el-button>
       <!-- 表格 -->
     <el-table :data="roles" style="width: 100%">
+      <el-table-column type="expand"  width="80">
+        <template slot-scope="scope">
+          <!-- 行列布局 -->
+          <el-row class="level1" v-for="(v1,i) in scope.row.children" :key="i">
+            <el-col :span="4"><el-tag>{{v1.authName}}</el-tag></el-col>
+            <el-col :span="20"></el-col>
+          </el-row>
+        </template>
+      </el-table-column>
       <el-table-column type="index" label="#" width="180"></el-table-column>
       <el-table-column prop="roleName" label="角色名称" width="200"></el-table-column>
       <el-table-column prop="roleDesc" label="角色描述" width="300"></el-table-column>
@@ -55,5 +64,8 @@ export default {
 }
 .btn{
   margin-top: 20px;
+}
+.level1{
+  margin-bottom: 10px;
 }
 </style>
