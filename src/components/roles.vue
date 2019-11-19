@@ -57,8 +57,8 @@
           :data="treelist"
           show-checkbox
           node-key="id"
-          :default-expanded-keys="[2, 3]"
-          :default-checked-keys="[5]"
+          :default-expanded-keys="arrExpanded"
+          :default-checked-keys="arrCheck"
           :props="defaultProps">
         </el-tree>
   <div slot="footer" class="dialog-footer">
@@ -74,7 +74,13 @@ export default {
     return {
       roles: [],
       dialogFormVisible: false,
-      treelist:[]
+      treelist: [],
+      arrCheck: [],
+      arrExpanded: [],
+      defaultProps: {
+        label: 'authName',
+        children: 'children'
+      }
     }
   },
   created () {
@@ -90,8 +96,14 @@ export default {
         this.roles = data
       }
     },
-    showRight () {
+    async showRight () {
       this.dialogFormVisible = true
+      const res = await this.$http.get(`rights/tree`)
+      console.log(res)
+      const {data,meta:{msg,status}} = res.data
+      if (status===200){
+        this.treelist = data
+      }
     },
     async deleRight (role, rights) {
       const res = await this.$http.delete(`roles/${role.id}/rights/${rights.id}`)
