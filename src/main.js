@@ -3,15 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import '@/assets/css/base.css'
-import axios from 'axios'
+import HttpServer from './http'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import CusBread from './components/cusBread.vue'
 import moment from 'moment'
 Vue.component('cusBread', CusBread)
-Vue.prototype.$http = axios
-axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
+Vue.use(HttpServer)
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.filter('time', (v) => {
