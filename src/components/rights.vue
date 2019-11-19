@@ -29,7 +29,7 @@ export default {
   methods: {
     async getTableData () {
       const res = await this.$http.get(`rights/list`)
-      console.log(res)
+
       const {data, meta: {msg, status}} = res.data
       console.log(msg)
       if (status === 200) {
