@@ -8,15 +8,18 @@
         <template slot-scope="scope">
           <!-- 行列布局 -->
           <el-row class="level1" v-for="(v1,i) in scope.row.children" :key="i">
-            <el-col :span="4"><el-tag type="success">{{v1.authName}}</el-tag></el-col>
+            <el-col :span="4"><el-tag type="success" closable>{{v1.authName}}</el-tag><i class="el-icon-arrow-right"></i></el-col>
             <el-col :span="20">
               <el-row class="level2" v-for="(v2,i) in v1.children" :key="i">
-                <el-col :span="4"><el-tag type="waring">{{v2.authName}}</el-tag></el-col>
+                <el-col :span="4"><el-tag type="waring" closable>{{v2.authName}}</el-tag><i class="el-icon-arrow-right"></i></el-col>
                 <el-col :span="20">
-                  <el-tag type="info" class="level3" v-for="(v3,i) in v2.children" :key="i">{{v3.authName}}</el-tag>
+                  <el-tag closable type="info" class="level3" v-for="(v3,i) in v2.children" :key="i">{{v3.authName}}</el-tag>
                 </el-col>
               </el-row>
             </el-col>
+          </el-row>
+          <el-row v-if="scope.row.children.length===0">
+            <el-col><span>未分配权限</span></el-col>
           </el-row>
         </template>
       </el-table-column>
@@ -61,7 +64,7 @@ export default {
         this.roles = data
       }
     },
-    showRight () {},
+    showRight () {}
   }
 }
 </script>
