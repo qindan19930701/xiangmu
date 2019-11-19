@@ -82,7 +82,8 @@ export default {
       defaultProps: {
         label: 'authName',
         children: 'children'
-      }
+      },
+      currRoleId:-1
     }
   },
   created () {
@@ -99,6 +100,7 @@ export default {
       }
     },
     async showRight (role) {
+      this.currRoleId = role.id
       this.dialogFormVisible = true
       const res = await this.$http.get(`rights/tree`)
       console.log(res)
@@ -148,9 +150,19 @@ export default {
     },
    async setRights() {
     // 获取全选节点id getCheckedKeys
-      this.$refs.treeDom.getCheckedKeys()
+     const arr1= this.$refs.treeDom.getCheckedKeys()
     // 获取半选节点id getHalfCheckedKeys
-    this.$refs.treeDom.getHalfCheckedKeys()
+     const arr2 = this.$refs.treeDom.getHalfCheckedKeys()
+     const arr = [...arr1,...arr2]
+      const res = await this.$http.post(`roles/${this.currRoleId}/rights`,{
+        rids:arr.join(',')
+      })
+      console.log(res)
+      const {data,meta:{msg,status}} = res.data
+      if (status===200) {
+        this.dialogFormVisible = false
+        this.getRoles();
+      }
     },
   }
 }
