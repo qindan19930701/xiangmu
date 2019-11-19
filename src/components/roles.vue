@@ -8,12 +8,16 @@
         <template slot-scope="scope">
           <!-- 行列布局 -->
           <el-row class="level1" v-for="(v1,i) in scope.row.children" :key="i">
-            <el-col :span="4"><el-tag type="success" closable>{{v1.authName}}</el-tag><i class="el-icon-arrow-right"></i></el-col>
+            <el-col :span="4">
+              <el-tag type="success" closable @close="deleRight(scope.row,v1)">{{v1.authName}}</el-tag>
+              <i class="el-icon-arrow-right"></i></el-col>
             <el-col :span="20">
               <el-row class="level2" v-for="(v2,i) in v1.children" :key="i">
-                <el-col :span="4"><el-tag type="waring" closable>{{v2.authName}}</el-tag><i class="el-icon-arrow-right"></i></el-col>
+                <el-col :span="4">
+                  <el-tag type="waring" closable @close="deleRight(scope.row,v2)">{{v2.authName}}</el-tag>
+                  <i class="el-icon-arrow-right"></i></el-col>
                 <el-col :span="20">
-                  <el-tag closable type="info" class="level3" v-for="(v3,i) in v2.children" :key="i">{{v3.authName}}</el-tag>
+                  <el-tag @close="deleRight(scope.row,v3)" closable type="info" class="level3" v-for="(v3,i) in v2.children" :key="i" >{{v3.authName}}</el-tag>
                 </el-col>
               </el-row>
             </el-col>
@@ -64,7 +68,19 @@ export default {
         this.roles = data
       }
     },
-    showRight () {}
+    showRight () {},
+    async deleRight (role, rights) {
+      const res = await this.$http.delete(`roles/${role.id}/rights/${rights.id}`)
+      console.log(res)
+      const {data, meta: {msg, status}} = res.data
+      console.log(data)
+      if (status === 200) {
+        this.$message.success(msg)
+        // this.getRoles()
+        // 只更新当前的角色权限
+        role.children = data
+      }
+    }
   }
 }
 </script>
