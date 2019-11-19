@@ -46,13 +46,22 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 对话框 -->
+    <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
+  <span>我是对话框</span>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
   </el-card>
 </template>
 <script>
 export default {
   data () {
     return {
-      roles: []
+      roles: [],
+      dialogFormVisible: false
     }
   },
   created () {
@@ -68,7 +77,9 @@ export default {
         this.roles = data
       }
     },
-    showRight () {},
+    showRight () {
+      this.dialogFormVisible = true
+    },
     async deleRight (role, rights) {
       const res = await this.$http.delete(`roles/${role.id}/rights/${rights.id}`)
       console.log(res)
