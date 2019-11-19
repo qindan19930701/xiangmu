@@ -48,7 +48,19 @@
     </el-table>
     <!-- 对话框 -->
     <el-dialog title="分配权限" :visible.sync="dialogFormVisible">
-  <span>我是对话框</span>
+      <!-- data 数据来源
+      node-key 每个节点唯一标识
+      :default-checked-keys []默认选中
+      :default-expanded-keys[] 默认展开
+      :props 配置选中{label/children} -->
+          <el-tree
+          :data="treelist"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="[2, 3]"
+          :default-checked-keys="[5]"
+          :props="defaultProps">
+        </el-tree>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -61,7 +73,8 @@ export default {
   data () {
     return {
       roles: [],
-      dialogFormVisible: false
+      dialogFormVisible: false,
+      treelist:[]
     }
   },
   created () {
