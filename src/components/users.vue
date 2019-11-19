@@ -161,6 +161,7 @@ export default {
   methods: {
     // 获取数据
     async getTableData () {
+      // 设置请求权限
       const token = localStorage.getItem('token')
       this.$http.defaults.headers.common['Authorization'] = token
       const res = await this.$http.get(
