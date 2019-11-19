@@ -1,7 +1,7 @@
 <template>
   <el-card class="box">
    <cus-bread level1='权限管理' level2='权限列表'></cus-bread>
-   <el-table :data="list" style="width: 100%">
+   <el-table height="350px" :data="list" style="width: 100%">
       <el-table-column type="index" label="#" width="160"></el-table-column>
       <el-table-column prop="authName" label="权限名称" width="200"></el-table-column>
       <el-table-column prop="path" label="路径" width="200"></el-table-column>

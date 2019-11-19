@@ -54,6 +54,7 @@
       :default-expanded-keys[] 默认展开
       :props 配置选中{label/children} -->
           <el-tree
+          ref="treeDom"
           :data="treelist"
           default-expand-all
           show-checkbox
@@ -64,7 +65,7 @@
         </el-tree>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    <el-button type="primary" @click="setRights()">确 定</el-button>
   </div>
 </el-dialog>
   </el-card>
@@ -144,7 +145,13 @@ export default {
         // 只更新当前的角色权限
         role.children = data
       }
-    }
+    },
+   async setRights() {
+    // 获取全选节点id getCheckedKeys
+      this.$refs.treeDom.getCheckedKeys()
+    // 获取半选节点id getHalfCheckedKeys
+    this.$refs.treeDom.getHalfCheckedKeys()
+    },
   }
 }
 </script>
