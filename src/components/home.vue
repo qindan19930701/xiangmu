@@ -94,14 +94,14 @@ export default {
       menus:[]
     }
   },
-  beforeMount () {
-    if (!localStorage.getItem('token')) {
-      this.$router.push({
-        name: 'login'
-      })
-      this.$message.warning('请先登录---')
-    }
-  },
+  // beforeMount () {
+  //   if (!localStorage.getItem('token')) {
+  //     this.$router.push({
+  //       name: 'login'
+  //     })
+  //     this.$message.warning('请先登录---')
+  //   }
+  // },
   methods: {
     handleLoginout () {
       // 1.清除token
