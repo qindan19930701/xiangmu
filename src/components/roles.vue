@@ -85,6 +85,7 @@ export default {
       },
       currRoleId: -1
     }
+
   },
   created () {
     this.getRoles()
