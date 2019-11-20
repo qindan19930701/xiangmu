@@ -83,7 +83,7 @@ export default {
         label: 'authName',
         children: 'children'
       },
-      currRoleId:-1
+      currRoleId: -1
     }
   },
   created () {
@@ -148,22 +148,22 @@ export default {
         role.children = data
       }
     },
-   async setRights() {
+    async setRights () {
     // 获取全选节点id getCheckedKeys
-     const arr1= this.$refs.treeDom.getCheckedKeys()
-    // 获取半选节点id getHalfCheckedKeys
-     const arr2 = this.$refs.treeDom.getHalfCheckedKeys()
-     const arr = [...arr1,...arr2]
-      const res = await this.$http.post(`roles/${this.currRoleId}/rights`,{
-        rids:arr.join(',')
+      const arr1 = this.$refs.treeDom.getCheckedKeys()
+      // 获取半选节点id getHalfCheckedKeys
+      const arr2 = this.$refs.treeDom.getHalfCheckedKeys()
+      const arr = [...arr1, ...arr2]
+      const res = await this.$http.post(`roles/${this.currRoleId}/rights`, {
+        rids: arr.join(',')
       })
       console.log(res)
-      const {data,meta:{msg,status}} = res.data
-      if (status===200) {
+      const {data, meta: {msg, status}} = res.data
+      if (status === 200) {
         this.dialogFormVisible = false
-        this.getRoles();
+        this.getRoles()
       }
-    },
+    }
   }
 }
 </script>

@@ -15,18 +15,18 @@
       class="el-menu-vertical-demo"
       >
       <!-- 1 -->
-      <el-submenu index="1">
+      <el-submenu :index="v1.order+''" v-for="(v1,i) in menus" :key="i">
         <template slot="title">
           <i class="el-icon-location"></i>
-          <span>用户管理</span>
+          <span>{{v1.authName}}</span>
         </template>
-          <el-menu-item index="users">
+          <el-menu-item :index="v2.path+''" v-for="(v2,i) in v1.children" :key="i">
             <i class="el-icon-menu"></i>
-            用户列表
+            {{v2.authName}}
             </el-menu-item>
         </el-submenu>
         <!-- 2 -->
-          <el-submenu index="2">
+          <!-- <el-submenu index="2">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>权限管理</span>
@@ -39,9 +39,9 @@
             <i class="el-icon-menu"></i>
             权限列表
             </el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
         <!-- 3 -->
-          <el-submenu index="3">
+          <!-- <el-submenu index="3">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>商品管理</span>
@@ -58,9 +58,9 @@
             <i class="el-icon-menu"></i>
             商品分类
             </el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
         <!-- 4 -->
-          <el-submenu index="4">
+          <!-- <el-submenu index="4">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>订单管理</span>
@@ -69,9 +69,9 @@
             <i class="el-icon-menu"></i>
            订单列表
             </el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
         <!-- 5 -->
-          <el-submenu index="5">
+          <!-- <el-submenu index="5">
         <template slot="title">
           <i class="el-icon-location"></i>
           <span>数据统计</span>
@@ -80,7 +80,7 @@
             <i class="el-icon-menu"></i>
             数据报表
             </el-menu-item>
-        </el-submenu>
+        </el-submenu> -->
       </el-menu>
     </el-aside>
     <el-main class="main"><router-view></router-view></el-main>
@@ -89,6 +89,11 @@
 </template>
 <script>
 export default {
+  data(){
+    return{
+      menus:[]
+    }
+  },
   beforeMount () {
     if (!localStorage.getItem('token')) {
       this.$router.push({
@@ -107,8 +112,19 @@ export default {
       })
       // 3.提示
       this.$message.warning('退出成功')
+    },
+    async getMenus () {
+      const res = await this.$http.get(`menus`)
+
+      const {data,meta:{msg,status}} = res.data
+      if(status===200){
+        this.menus=data
+      }
     }
-  }
+  },
+  created () {
+    this.getMenus()
+  },
 }
 </script>
 <style >
