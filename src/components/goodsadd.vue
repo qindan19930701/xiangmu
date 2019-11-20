@@ -49,8 +49,26 @@
              </el-checkbox-group>
             </el-form-item>
           </el-tab-pane>
-          <el-tab-pane name="3" label="商品属性"></el-tab-pane>
-          <el-tab-pane name="4" label="商品图片"></el-tab-pane>
+          <el-tab-pane name="3" label="商品属性">
+            <el-form-item :label="v.attr_name" v-for="(v,i) in arrSty" :key="v.attr_id">
+              <el-input v-model="v.attr_vals"></el-input>
+            </el-form-item>
+          </el-tab-pane>
+          <el-tab-pane name="4" label="商品图片">
+            <!-- action 服务器目录路径（全路径网址）
+            headers{} 请求头 -->
+            <el-form-item >
+              <el-upload
+                action="http://localhost:8888/api/private/v1/upload"
+                :headers="headers"
+                :on-remove="handleRemove"
+                :on-success="handleSuccess"
+                list-type="picture">
+                <el-button size="small" type="primary">点击上传</el-button>
+              </el-upload>
+            </el-form-item>
+
+          </el-tab-pane>
           <el-tab-pane name="5" label="商品内容"></el-tab-pane>
       </el-tabs>
     </el-form>
@@ -80,7 +98,10 @@ data(){
       children:'children'
     },
     arrDy:[],
-    arrSty:[]
+    arrSty:[],
+    headers:{
+      Authorization:localStorage.getItem("token")
+    }
 
   }
 },
@@ -134,6 +155,13 @@ async changeTab(){
 
   }
 },
+// 图片上传相关方法
+ handleRemove(file, fileList) {
+        console.log(file);
+      },
+  handleSuccess (response, file, fileList){
+console.log(response);
+  },
 },
 }
 </script>
