@@ -43,8 +43,8 @@
              <el-form-item :label="v1.attr_name"
              v-for="(v1,i) in arrDy" :key="v1.attr_id"
              >
-              <el-checkbox-group v-model="checkList">
-                    <el-checkbox :label="v2" v-for="(v2,i) in v1.attr_vals" :key="i"></el-checkbox>
+              <el-checkbox-group v-model="v1.attr_vals">
+                    <el-checkbox border :label="v2" v-for="(v2,i) in v1.attr_vals" :key="i"></el-checkbox>
 
              </el-checkbox-group>
             </el-form-item>
@@ -80,7 +80,8 @@ data(){
       children:'children'
     },
     arrDy:[],
-    checkList:[]
+    arrSty:[]
+
   }
 },
 created(){
@@ -98,12 +99,13 @@ methods:{
  },
 handleChange(){},
 async changeTab(){
-  if(this.active==="2"){
+  if(this.active==="2" || this.active==="3"){
     if(this.selectedOptions.length!==3){
       this.$message.error("请选择三级分类")
       return
     }
-    // 获取动态参数数据
+    if(this.active==="2"){
+      // 获取动态参数数据
     const res = await this.$http.get(`categories/${this.selectedOptions[2]}/attributes?sel=many`)
     const {data,meta:{msg,status}} = res.data
     if (status===200){
@@ -119,6 +121,17 @@ async changeTab(){
       }
       })
     }
+    }
+   if(this.active==="3"){
+ // 获取静态数组
+    const res = await this.$http.get(`categories/${this.selectedOptions[2]}/attributes?sel=only`)
+    const {data,meta:{msg,status}} = res.data
+    if (status===200){
+      this.arrSty=data
+      console.log(this.arrSty)
+    }
+   }
+
   }
 },
 },
