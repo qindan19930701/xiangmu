@@ -168,7 +168,7 @@ async changeTab(){
     const {data,meta:{msg,status}} = res.data
     if (status===200){
       this.arrSty=data
-      console.log(this.arrSty)
+
     }
    }
 
