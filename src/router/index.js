@@ -8,6 +8,7 @@ import Rigths from '../components/rights.vue'
 import Roles from '../components/roles.vue'
 import Goods from '../components/goodslist.vue'
 import Goodsadd from '../components/goodsadd.vue'
+import Params from '../components/params.vue'
 Vue.use(Router)
 
 const router= new Router({
@@ -36,6 +37,10 @@ const router= new Router({
         name:'goodsadd',
         path:'/goodsadd',
         component:Goodsadd
+      },{
+        name:'params',
+        path:'/params',
+        component:Params
       }]
     }, {
       name: 'login',
