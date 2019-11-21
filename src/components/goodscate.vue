@@ -34,7 +34,22 @@
       </div>
     </el-dialog>
     <!-- 表格 -->
+    <!-- treeKey 每个节点唯一的标识 id
+    parentKey 父级数据的key名
+    childKey  子级数据的key名 children
+    levelKey  当前自己的层级 -->
     <el-table height="450" :data="list" style="width: 100%">
+      <el-tree-grid
+      prop="cat_name"
+      width="120"
+      label="分类名称"
+      treeKey="cat_id"
+      parentKey="cat_pid"
+      childKey="children"
+      levelKey="cat_level"
+      >
+
+      </el-tree-grid>
       <el-table-column label="级别">
         <template slot-scope="scope">
           <span v-if="scope.row.cat_level===0">一级</span>
@@ -72,7 +87,13 @@
 </template>
 
 <script>
+// import ElTreeGrid form ('element-tree-grid')
+import ElTreeGrid  from 'element-tree-grid'
+
 export default {
+  components:{
+   ElTreeGrid
+  },
   data() {
     return {
       list: [],
@@ -101,7 +122,26 @@ export default {
   },
   methods: {
     // 添加分类 - 发送请求
-    async addCate() {},
+    async addCate() {
+      if(this.selectedOptions.length===0){
+        this.form.cat_level=0;
+        this.form.cat_pid=0
+      }
+      if(this.selectedOptions.length===1){
+        this.form.cat_level=1;
+        this.form.cat_pid=this.selectedOptions[0]
+      }
+      if(this.selectedOptions.length===2){
+        this.form.cat_level=2;
+        this.form.cat_pid=this.selectedOptions[1]
+      }
+      const res = await this.$http.post(`categories`,this.form)
+      const {meta:{msg,status}}=res.data
+      if(status===201){
+        this.dialogFormVisibleAdd = false
+        this.getGoodsCate()
+      }
+    },
     // 添加分类- 显示对话框
     async addGoodsCate() {
       // 获取两级分类的数据
@@ -150,6 +190,9 @@ export default {
 
 .searchArea .searchInput {
   width: 350px;
+}
+.el-icon-folder{
+  display: none;
 }
 </style>
 
