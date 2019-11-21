@@ -29,7 +29,25 @@
     <!-- 展开 -->
     <el-table-column type="expand" width="100">
       <template slot-scope="scope">
-         <span>123</span>
+         <!-- 动态tag编辑 -->
+         <el-tag
+                  :key="tag"
+                  v-for="tag in dynamicTags"
+                  closable
+                  :disable-transitions="false"
+                  @close="handleClose(tag)">
+                  {{tag}}
+                </el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="inputVisible"
+                  v-model="inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm"
+                  @blur="handleInputConfirm">
+          </el-input>
+          <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
       </template>
       </el-table-column>
       <!-- 序号 -->
@@ -73,7 +91,10 @@ data(){
       children:'children'
     },
     active:"1",
-    arrDy:[]
+    arrDy:[],
+      dynamicTags: ['标签一', '标签二', '标签三'],
+      inputVisible: false,
+      inputValue: ''
   }
 },
 created(){
@@ -93,7 +114,7 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
    this.arrDy.forEach(v=>{
      v.attr_vals=v.attr_vals.trim().length===0 ? [] : v.attr_vals.trim().split(",")
    })
-   console.log(this.arrDy)
+
  }
 
  },
@@ -104,7 +125,27 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
     if(status===200){
       this.options=data
     }
-  }
+  },
+  //  动态tag的相关方法
+  handleClose(tag) {
+        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+      },
+
+      showInput() {
+        this.inputVisible = true;
+        this.$nextTick(_ => {
+          this.$refs.saveTagInput.$refs.input.focus();
+        });
+      },
+
+      handleInputConfirm() {
+        let inputValue = this.inputValue;
+        if (inputValue) {
+          this.dynamicTags.push(inputValue);
+        }
+        this.inputVisible = false;
+        this.inputValue = '';
+      }
 },
 }
 </script>
@@ -115,4 +156,19 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
 .alert{
   margin-top: 20px;
 }
+.el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>
