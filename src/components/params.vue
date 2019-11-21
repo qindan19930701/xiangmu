@@ -16,6 +16,46 @@
        </el-cascader>
      </el-form-item>
      </el-form >
+     <el-tabs type="border-card" v-model="active">
+          <el-tab-pane name="1" label="动态参数">
+            <el-button disabled="">设置动态参数</el-button>
+             <el-table
+      height="450px"
+      border
+      stripe
+
+      :data="arrDy"
+      style="width: 100%">
+    <!-- 展开 -->
+    <el-table-column type="expand" width="100">
+      <template slot-scope="scope">
+         <span>123</span>
+      </template>
+      </el-table-column>
+      <!-- 序号 -->
+      <el-table-column
+      type="index" label="#" width="100">
+      </el-table-column>
+
+      <el-table-column
+        prop="attr_name"
+        label="属性名称"
+        width="300"
+        >
+      </el-table-column>
+
+      <el-table-column
+        label="操作" width="100">
+        <template slot-scope="scope">
+        <el-button  plain size="mini" type="primary" icon="el-icon-edit" circle></el-button>
+        <el-button  plain size="mini" type="danger" icon="el-icon-delete" circle></el-button>
+        </template>
+      </el-table-column>
+  </el-table>
+          </el-tab-pane>
+          <el-tab-pane name="2" label="静态参数">静态参数</el-tab-pane>
+
+    </el-tabs>
   </el-card>
 </template>
 <script>
@@ -32,15 +72,31 @@ data(){
       value:'cat_id',
       children:'children'
     },
+    active:"1",
+    arrDy:[]
   }
 },
 created(){
   this.getGoodsCate()
 },
 methods:{
-  handleChange(){
-    console.log("级联被触发了")
-  },
+ async handleChange(){
+    if(this.selectedOptions.length!==3){
+      this.$message.warning("请选择三级分类")
+      return
+    }
+    //获取动态数据
+const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attributes?sel=many`)
+ const {data,meta:{msg,status}}=res.data
+ if(status===200){
+   this.arrDy=data
+   this.arrDy.forEach(v=>{
+     v.attr_vals=v.attr_vals.trim().length===0 ? [] : v.attr_vals.trim().split(",")
+   })
+   console.log(this.arrDy)
+ }
+
+ },
   //获取三级分类
   async getGoodsCate(){
     const res=await this.$http.get(`categories?type=3`)
