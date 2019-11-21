@@ -35,7 +35,7 @@
                  v-model="selectedOptions"
                  :options="options"
                  :props="defaultProp"
-                 @change="handleChange"></el-cascader>
+                 @change.prevent="handleChange"></el-cascader>
             </el-form-item>
           </el-tab-pane>
           <el-tab-pane name="2" label="商品参数">
@@ -135,6 +135,13 @@ async changeTab(){
   if(this.active==="2" || this.active==="3"){
     if(this.selectedOptions.length!==3){
       this.$message.error("请选择三级分类")
+      if(this.active===2){
+         this.arrDy=[]
+      }else{
+      this.arrSty=[]
+      }
+
+
       return
     }
     if(this.active==="2"){
@@ -181,8 +188,27 @@ async changeTab(){
   },
  async addGoods(){
    this.form.goods_cat=this.selectedOptions.join(",")
-
+const arr1=  this.arrDy.map((item)=>{
+   return  {
+      attr_id:item.attr_id,
+      attr_value:item.attr_vals
+    }
+  })
+  const arr2=  this.arrSty.map((item)=>{
+   return  {
+      attr_id:item.attr_id,
+      attr_value:item.attr_vals
+    }
+  })
+  this.form.attrs=[...arr1,...arr2]
 const res=await this.$http.post(`goods`,this.form)
+const {data,meta:{msg,status}}=res.data
+if(status===201){
+  this.$message.success('创建成功')
+  this.$router.push({
+    name:"goods"
+  })
+}
   },
 },
 }
