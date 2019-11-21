@@ -126,9 +126,14 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
     }
   },
   //  动态tag的相关方法
-  handleClose(obj,v) {
+ async handleClose(obj,v) {
         obj.attr_vals.splice(obj.attr_vals.indexOf(v), 1);
-      },
+        const res = await this.$http.put(`categories/${this.selectedOptions[2]}/attributes/${obj.attr_id}`,{
+          attr_name:obj.attr_name,
+          attr_sel: obj.attr_sel,
+          attr_vals:obj.attr_vals.join(",")
+        })
+},
 
       showInput() {
         this.inputVisible = true;
