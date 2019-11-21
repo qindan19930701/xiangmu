@@ -31,12 +31,12 @@
       <template slot-scope="scope">
          <!-- 动态tag编辑 -->
          <el-tag
-                  :key="tag"
-                  v-for="tag in dynamicTags"
+                  :key="i"
+                  v-for="(v,i) in scope.row.attr_vals"
                   closable
                   :disable-transitions="false"
-                  @close="handleClose(tag)">
-                  {{tag}}
+                  @close="handleClose(scope.row,v)">
+                  {{v}}
                 </el-tag>
                 <el-input
                   class="input-new-tag"
@@ -44,8 +44,8 @@
                   v-model="inputValue"
                   ref="saveTagInput"
                   size="small"
-                  @keyup.enter.native="handleInputConfirm"
-                  @blur="handleInputConfirm">
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)">
           </el-input>
           <el-button v-else class="button-new-tag" size="small" @click="showInput">+ New Tag</el-button>
       </template>
@@ -92,8 +92,7 @@ data(){
     },
     active:"1",
     arrDy:[],
-      dynamicTags: ['标签一', '标签二', '标签三'],
-      inputVisible: false,
+     inputVisible: false,
       inputValue: ''
   }
 },
@@ -127,8 +126,8 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
     }
   },
   //  动态tag的相关方法
-  handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
+  handleClose(obj,v) {
+        obj.attr_vals.splice(obj.attr_vals.indexOf(v), 1);
       },
 
       showInput() {
@@ -138,10 +137,10 @@ const res= await this.$http.get(`categories/${this.selectedOptions[2]}/attribute
         });
       },
 
-      handleInputConfirm() {
+      handleInputConfirm(obj) {
         let inputValue = this.inputValue;
         if (inputValue) {
-          this.dynamicTags.push(inputValue);
+          obj.attr_vals.push(inputValue);
         }
         this.inputVisible = false;
         this.inputValue = '';
