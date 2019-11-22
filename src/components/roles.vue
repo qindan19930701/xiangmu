@@ -3,7 +3,9 @@
     <cus-bread level1="权限管理" level2="角色列表"></cus-bread>
     <el-button type="primary" class="btn">添加角色</el-button>
       <!-- 表格 -->
-    <el-table height="380px" :data="roles" style="width: 100%">
+    <el-table
+    @expand-change="fn"
+    height="380px" :data="roles" style="width: 100%">
       <el-table-column type="expand"  width="80">
         <template slot-scope="scope">
           <!-- 行列布局 -->
@@ -91,6 +93,13 @@ export default {
     this.getRoles()
   },
   methods: {
+    fn(row,expandedRows){
+      // console.log(row)
+      // console.log(expandedRows)
+      if (expandedRows.length >1){
+        expandedRows.shift()
+      }
+    },
     async getRoles () {
       const res = await this.$http.get(`roles`)
       console.log(res)

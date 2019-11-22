@@ -15,7 +15,13 @@ HttpServer.install = function (Vue) {
   })
   // const token = localStorage.getItem('token')
   // axios.defaults.headers.common['Authorization'] = token
-
+  // 响应拦截器
+  // 统一处理satus非200和201的错误情况
+  // axios.interceptors.response.use(function(respose){
+  //   return response
+  // },function(error){
+  //   return Promise.reject(error)
+  // })
   Vue.prototype.$http = axios
 }
 export default HttpServer
