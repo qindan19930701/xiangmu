@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import City from '../assets/city_data2017_element'
 export default {
   data() {
     return {
@@ -76,7 +77,7 @@ export default {
       this.list = res.data.data.goods;
     },
     showEditdia() {
-      this.catlist = [];
+      this.catlist = City;
       this.dialogFormVisible = true;
     }
   }
